@@ -1,5 +1,17 @@
-var map;
+//MODEL
 
+
+
+
+//MODEL VIEW
+
+
+
+
+
+//VIEW
+
+var map;
 function initMap() {
 
 
