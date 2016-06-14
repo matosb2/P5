@@ -1,5 +1,30 @@
 //MODEL
-
+var locations = [
+	{
+		name: 'Red Bull Arena',
+		address: '600 Cape May St, Harrison, NJ 07029'
+	},
+	{
+		name: 'MetLife Stadium',
+		address: '1 MetLLife Stadium Dr, East Rutherford, NJ 07073'
+	},
+	{
+		name: 'World Trade Center',
+		address: '285 Fulton St, New York, NY 10007'
+	},
+	{
+		name: 'Zeppelin Hall Biergarten',
+		address: '88 Liberty View Dr, Jersey City, NJ 07302'
+	},
+	{
+		name: 'Prudential Center',
+		address: '25 Lafayette St, Newark, NJ 07102'
+	},
+	{
+		name: 'Madison Square Garden',
+		address: '4 Pennsylvania Plaza, New York, NY 10001'
+	}
+];
 
 
 
