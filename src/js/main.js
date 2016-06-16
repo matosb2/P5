@@ -34,8 +34,10 @@ var locations = [
 
 
 //VIEW MODEL
-
-
+var viewModel = {
+	locations: ko.observableArray(locations)
+};
+ko.applyBindings(viewModel);
 
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
