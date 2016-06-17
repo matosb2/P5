@@ -34,9 +34,32 @@ var locations = [
 
 
 //VIEW MODEL
-var viewModel = {
-	locations: ko.observableArray(locations)
+var Location = function(data) {
+	this.name = ko.observable(data.title);
+	this.address = ko.observable(data.address);
+	this.lat = ko.observable(data.lat);
+	this.long = ko.observable(data.long);
+}
+
+var viewModel = function() {
+	var self = this;
+
+	this.locationList = ko.observableArray([]);
+	locations.forEach(function(locationItem) {
+		self.locationList.push(new Location(locationItem));
+	});
+
+	this.currentLocation = ko.observable(this.locationList()[0]);
+	this.setLocation = function (clickedLocation) {
+		self.currentLocation(clickedLocation);
+		google.maps.event.trigger(clickedLocation.marker, 'click');
+	};
+
+	this.places = ko.observableArray(locations);
+	this.query = ko.observable("");
+
 };
+
 ko.applyBindings(viewModel);
 
 function initMap() {
