@@ -72,7 +72,9 @@ function initMap() {
     
     gmarkers = [];
 
+
     function createMarker(latlng, html) {
+    	html = locations[i].name;
     	latlng = new google.maps.LatLng(locations[i].lat, locations[i].long);
         marker = new google.maps.Marker({
             position: latlng,
@@ -81,7 +83,7 @@ function initMap() {
 
         google.maps.event.addListener(marker, 'click', function() {
         	infowindow.setContent(html);
-        	infowindow.open(map, marker);
+        	infowindow.open(map, this);
     	});
     return marker;
     }
