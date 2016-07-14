@@ -70,11 +70,10 @@ function initMap() {
 
     var marker;
     
-    gmarkers = [];
 
 
     function createMarker(latlng, html) {
-    	html = locations[i].name;
+    	html = '<h3>' + locations[i].name + '</h3>' + locations[i].address;
     	latlng = new google.maps.LatLng(locations[i].lat, locations[i].long);
         marker = new google.maps.Marker({
             position: latlng,
@@ -90,18 +89,11 @@ function initMap() {
 
 
     for (i = 0; i < locations.length; i++) {
-        gmarkers[locations[i][0]] =
-            createMarker(new google.maps.LatLng(locations[i][2], locations[i][3]), locations[i][0] + "<br>" + locations[i][1]);
+            createMarker(new google.maps.LatLng(locations[i][2], locations[i][3]));
     }
 
 
 
-    /*google.maps.event.addListener(marker, 'click', (function(marker, i) {
-        return function() {
-            infowindow.setContent(locations[i].name);
-            infowindow.open(map, marker);
-        };
-    })(marker, i));*/
 
 ko.applyBindings(new viewModel());
 }
