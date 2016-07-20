@@ -13,7 +13,7 @@
         <input id="searchbox"placeholder="Search..." type="search" daatabind="value: query, valueUpdate: 'keyup'" autocomplete="off">
         <div id="menu">
             <ul data-bind="foreach: locations">
-                <li data-bind="text: name"></li>
+                <li data-bind="text: name, click: $parent.setLocation"></li>
             </ul>
         </div>
     </div>
