@@ -89,7 +89,7 @@ function initMap() {
 
 
     for (i = 0; i < locations.length; i++) {
-            createMarker(new google.maps.LatLng(locations[i][2], locations[i][3]));
+    	locations[i].marker = createMarker(new google.maps.LatLng(locations[i].lat, locations[i].long));
     }
 
 
