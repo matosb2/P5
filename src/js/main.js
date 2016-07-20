@@ -33,7 +33,7 @@ var locations = [{
 
 //VIEW MODEL
 var Location = function(data) {
-    this.name = ko.observable(data.title);
+    this.name = ko.observable(data.name);
     this.address = ko.observable(data.address);
     this.lat = ko.observable(data.lat);
     this.long = ko.observable(data.long);
