@@ -34,27 +34,32 @@ var locations = [{
 //VIEW MODEL
 var Location = function(data) {
     this.name = ko.observable(data.name);
-    this.address = ko.observable(data.address);
+    /*this.address = ko.observable(data.address);
     this.lat = ko.observable(data.lat);
-    this.long = ko.observable(data.long);
+    this.long = ko.observable(data.long);*/
 };
 
 var viewModel = function() {
     var self = this;
-
-    this.locationList = ko.observableArray([]);
+    self.places = ko.observableArray(locations);
+    /*self.locationList = ko.observableArray([]);
     locations.forEach(function(locationItem) {
-        self.locationList.push(new Location(locationItem));
-    });
+        self.places.push(new Location(locationItem));
+    });*/
 
-    this.currentLocation = ko.observable(this.locationList()[0]);
+    this.currentLocation = ko.observable(self.places()[0]);
     this.setLocation = function(clickedLocation) {
         self.currentLocation(clickedLocation);
         google.maps.event.trigger(clickedLocation.marker, 'click');
     };
 
-    this.places = ko.observableArray(locations);
-    this.query = ko.observable("");
+
+    self.query = ko.observable('');
+    self.search = ko.computed(function() {
+        return ko.utils.arrayFilter(self.places(), function(place) {
+            return place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
+        });
+    });
 
 };
 
@@ -69,31 +74,31 @@ function initMap() {
     var infowindow = new google.maps.InfoWindow();
 
     var marker;
-    
+
 
 
     function createMarker(latlng, html) {
-    	html = '<h3>' + locations[i].name + '</h3>' + locations[i].address;
-    	latlng = new google.maps.LatLng(locations[i].lat, locations[i].long);
+        html = '<h3>' + locations[i].name + '</h3>' + locations[i].address;
+        latlng = new google.maps.LatLng(locations[i].lat, locations[i].long);
         marker = new google.maps.Marker({
             position: latlng,
-            map: map
+            map: map,
         });
 
         google.maps.event.addListener(marker, 'click', function() {
-        	infowindow.setContent(html);
-        	infowindow.open(map, this);
-    	});
-    return marker;
+            infowindow.setContent(html);
+            infowindow.open(map, this);
+        });
+        return marker;
     }
 
 
     for (i = 0; i < locations.length; i++) {
-    	locations[i].marker = createMarker(new google.maps.LatLng(locations[i].lat, locations[i].long));
+        locations[i].marker = createMarker(new google.maps.LatLng(locations[i].lat, locations[i].long));
     }
 
 
 
 
-ko.applyBindings(new viewModel());
+    ko.applyBindings(new viewModel());
 }

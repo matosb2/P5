@@ -10,9 +10,9 @@
 
 <body>
     <div id="searchmenu">
-        <input id="searchbox"placeholder="Search..." type="search" daatabind="value: query, valueUpdate: 'keyup'" autocomplete="off">
+        <input id="searchbox" placeholder="Search..." type="search" data-bind="textInput: query"></input>
         <div id="menu">
-            <ul data-bind="foreach: locations">
+            <ul data-bind="foreach: search()">
                 <li data-bind="text: name, click: $parent.setLocation"></li>
             </ul>
         </div>
