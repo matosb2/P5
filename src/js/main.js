@@ -61,6 +61,20 @@ var viewModel = function() {
         });
     });
 
+    self.search = ko.computed(function() {
+    	for(var i = 0; i < locations.length; i++) {
+    		locations[i].marker.setVisible(true);
+    	}
+    	return ko.utils.arrayFilter(locations, function(place) {
+    		if (place.name.toLowerCase().indexOf(self.query().toLowerCase()) >=0) {
+    			return true;
+    		}
+
+    		place.marker.setVisible(false);
+    		return false;
+    	});
+    });
+
 };
 
 
@@ -83,6 +97,7 @@ function initMap() {
         marker = new google.maps.Marker({
             position: latlng,
             map: map,
+            
         });
 
         google.maps.event.addListener(marker, 'click', function() {
