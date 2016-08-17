@@ -1,3 +1,4 @@
+// Set up object array to be used later by map, markers, and list
 var locations = [{
     name: "Red Bull Arena",
     address: "600 Cape May St, Harrison, NJ 07029",
@@ -48,10 +49,7 @@ var Location = function(data) {
 var viewModel = function() {
     var self = this;
     self.places = ko.observableArray(locations);
-    /*self.locationList = ko.observableArray([]);
-    locations.forEach(function(locationItem) {
-        self.places.push(new Location(locationItem));
-    });*/
+
 
     this.currentLocation = ko.observable(self.places()[0]);
     this.setLocation = function(clickedLocation) {
@@ -84,7 +82,8 @@ var viewModel = function() {
 };
 
 
-
+// Main map function that zooms in and centers it at specific location due to the given
+// coordinates.  Also displays the map in the respective div.
 function initMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         zoom: 12,
@@ -93,10 +92,10 @@ function initMap() {
 
     var infowindow = new google.maps.InfoWindow();
 
-    //var marker;
 
 
-
+    // Marker gets created on map with a falling animation and positioned in respective coordinates from locations array up top.
+    // Info window information from locations object array above and format stored to html object
     function createMarker(latlng, html) {
         html = '<h3>' + locations[i].name + '</h3>' + locations[i].address;
         latlng = new google.maps.LatLng(locations[i].lat, locations[i].long);
@@ -106,6 +105,8 @@ function initMap() {
             position: latlng
         });
 
+        // When marker gets clicked on it toggles bouncing animation and info window pops up 
+        // on map with html object information from the createMarker function.
         google.maps.event.addListener(marker, 'click', function() {
             infowindow.setContent(html);
             infowindow.open(map, this);
@@ -123,13 +124,13 @@ function initMap() {
         }
     }
 
-
+    // 
     for (i = 0; i < locations.length; i++) {
         locations[i].marker = createMarker(new google.maps.LatLng(locations[i].lat, locations[i].long));
     }
 
 
 
-
+    //  Activate knockout bindings
     ko.applyBindings(new viewModel());
 }
