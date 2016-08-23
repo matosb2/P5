@@ -38,7 +38,7 @@ var locations = [{
 }];
 
 
-//VIEW MODEL
+//VIEW 
 var Location = function(data) {
     this.name = ko.observable(data.name);
     /*this.address = ko.observable(data.address);
@@ -46,18 +46,26 @@ var Location = function(data) {
     this.long = ko.observable(data.long);*/
 };
 
+// Considering how 'this' changes in every scope, 'self' will preserve
+// 'this' value throughout viewModel.  Since we want our array of objects to be
+// able to detect changes as well as respond to changes we use knockout's
+// observableArray and pass our array of objects (locations) through it.
+// It will now be referred to self.places.
 var viewModel = function() {
     var self = this;
     self.places = ko.observableArray(locations);
 
-
+    // Set currentLocation to first object in object array.
+    // When particular object is clicked from list, change currentLocation
+    // value to the clicked location.  Also trigger a click on the marker.
     this.currentLocation = ko.observable(self.places()[0]);
     this.setLocation = function(clickedLocation) {
         self.currentLocation(clickedLocation);
         google.maps.event.trigger(clickedLocation.marker, 'click');
     };
 
-
+    // Setting up search so it filters through object array or locations
+    // while allowing lowercase typing to bring back relevant results.
     self.query = ko.observable('');
     self.search = ko.computed(function() {
         return ko.utils.arrayFilter(self.places(), function(place) {
@@ -65,10 +73,14 @@ var viewModel = function() {
         });
     });
 
+    // Display list of locations in a list view
     self.search = ko.computed(function() {
         for (var i = 0; i < locations.length; i++) {
             locations[i].marker.setVisible(true);
         }
+        // If what's typed in input lowercase or not matches a location in object array
+        // display the results, however many there are.  If there are objects that don't contain
+        // what's typed in the input then hide those objects.
         return ko.utils.arrayFilter(locations, function(place) {
             if (place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0) {
                 return true;
@@ -115,6 +127,8 @@ function initMap() {
         return marker;
     }
 
+    // Set's bounce animation to marker with a timer on it so it doesn't
+    // keep bouncing forever
     function toggleBounce(marker) {
         if (marker.getAnimation() !== null) {
             marker.setAnimation(null);
@@ -124,7 +138,9 @@ function initMap() {
         }
     }
 
-    // 
+    // Loop that iterates through each object in the locations array.  Marker property stores coordinates
+    // for exact location for each object.  Because createMarker function is called it will display each 
+    // and every marker in locations on the map.
     for (i = 0; i < locations.length; i++) {
         locations[i].marker = createMarker(new google.maps.LatLng(locations[i].lat, locations[i].long));
     }
