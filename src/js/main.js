@@ -149,4 +149,44 @@ function initMap() {
 
     //  Activate knockout bindings
     ko.applyBindings(new viewModel());
-}
+
+    var yelp_url = "https://api.yelp.com/v2/search?cll=37.77493,-122.419415";
+    var yelpRequestTimeout = setTimeout(function() {
+        //$yelpElem.text("failed to get yelp resources");
+    }, 8000);
+
+    var nonce = Math.floor(Math.random() * 1e12).toString();
+    var parameters = {
+        oauth_consumer_key: 'AOsWUWqrkWd3Lx9RHt4ihA',
+        oauth_token: 'rqRj4BFQ1xVBEut_57pPedSonmLjkyde',
+        oauth_nonce: nonce,
+        oauth_timestamp: Math.floor(Date.now() / 1000),
+        oauth_signature_method: 'HMAC-SHA1',
+        oauth_version: '1.0',
+        callback: 'cb',
+        latitude: 40.753011,
+        longitude: -74.128069,
+        radius_filter: 40000,
+        limit: 1
+    };
+
+    var encodedSignature = oauthSignature.generate('GET', yelp_url, parameters,
+        'bVxTwnXgkOCAg5Kfhrw7eWEthu8', 'cK98_xpt5iXoBJVyeysJzw5Ypxk');
+    parameters.oauth_signature = encodedSignature;
+    console.log("obtaining encodedSignature:" + encodedSignature);
+
+
+    $.ajax({
+        url: yelp_url,
+        data: parameters,
+        cache: true,
+        dataType: "jsonp",
+
+        //jsonp: "callback",
+        success: function(response) {
+            /*var bizname = response.businesses.name;
+            var bizurl = response.businesses.url;
+            $yelpElem.append('<li><a href="' + bizurl + '">' + bizname + '</a></li>');*/
+        }
+    });
+};
