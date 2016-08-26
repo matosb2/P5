@@ -150,43 +150,43 @@ function initMap() {
     //  Activate knockout bindings
     ko.applyBindings(new viewModel());
 
-    var yelp_url = "https://api.yelp.com/v2/search?cll=37.77493,-122.419415";
-    var yelpRequestTimeout = setTimeout(function() {
-        //$yelpElem.text("failed to get yelp resources");
-    }, 8000);
+    
+    function nonce_generate() {
+        return (Math.floor(Math.random() * 1e12).toString());
+    }
 
-    var nonce = Math.floor(Math.random() * 1e12).toString();
+    var yelp_url = 'http://api.yelp.com/v2/search';
+
     var parameters = {
         oauth_consumer_key: 'AOsWUWqrkWd3Lx9RHt4ihA',
         oauth_token: 'rqRj4BFQ1xVBEut_57pPedSonmLjkyde',
-        oauth_nonce: nonce,
+        oauth_nonce: nonce_generate(),
         oauth_timestamp: Math.floor(Date.now() / 1000),
         oauth_signature_method: 'HMAC-SHA1',
         oauth_version: '1.0',
-        callback: 'cb',
-        latitude: 40.753011,
-        longitude: -74.128069,
-        radius_filter: 40000,
-        limit: 1
+        callback: 'cb', // This is crucial to include for jsonp implementation in AJAX or else the oauth-signature will be wrong.
+    	location: 'New York',
+    	term: 'food',
+    	limit: 1
     };
 
-    var encodedSignature = oauthSignature.generate('GET', yelp_url, parameters,
-        'bVxTwnXgkOCAg5Kfhrw7eWEthu8', 'cK98_xpt5iXoBJVyeysJzw5Ypxk');
+    var encodedSignature = oauthSignature.generate('GET', yelp_url, parameters, 'bVxTwnXgkOCAg5Kfhrw7eWEthu8', 'cK98_xpt5iXoBJVyeysJzw5Ypxk');
     parameters.oauth_signature = encodedSignature;
-    console.log("obtaining encodedSignature:" + encodedSignature);
 
-
-    $.ajax({
+    var settings = {
         url: yelp_url,
         data: parameters,
-        cache: true,
-        dataType: "jsonp",
-
-        //jsonp: "callback",
-        success: function(response) {
-            /*var bizname = response.businesses.name;
-            var bizurl = response.businesses.url;
-            $yelpElem.append('<li><a href="' + bizurl + '">' + bizname + '</a></li>');*/
+        cache: true, // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
+        dataType: 'jsonp',
+        success: function(results) {
+            // Do stuff with results
+            console.log(results);
+        },
+        error: function() {
+            // Do stuff on fail
         }
-    });
+    };
+
+    // Send AJAX query via jQuery library.
+    $.ajax(settings);
 };
