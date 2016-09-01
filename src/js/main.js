@@ -127,11 +127,11 @@ function nonce_generate() {
         cache: true, // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
         dataType: 'jsonp',
         success: function(results) {
+            console.log(results);
           // Do stuff with results
           locations[i].url = results.url;
-          locations[i].rating_img_large_url = results.rating_img_url_large;
+          locations[i].rating_img_small_url = results.rating_img_url_small;
           locations[i].snippet_text = results.snippet_text;
-        console.log(locations[i]);
         },
         error: function() {
             // Do stuff on fail
@@ -145,11 +145,11 @@ function nonce_generate() {
   for(var i = 0; i < locations.length; i++) {
     yelpAPI(i);
   }
-
+var map;
 // Main map function that zooms in and centers it at specific location due to the given
 // coordinates.  Also displays the map in the respective div.
 function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         zoom: 12,
         center: new google.maps.LatLng(40.753011, -74.128069)
     });
@@ -159,21 +159,22 @@ function initMap() {
 
 
     // Marker gets created on map with a falling animation and positioned in respective coordinates from locations array up top.
-    // Info window information from locations object array above and format stored to html object
-    function createMarker(latlng, html) {
-        html = '<h3>' + locations[i].name + '</h3>' + locations[i].address;
-        latlng = new google.maps.LatLng(locations[i].lat, locations[i].long);
+    function createMarker(location) {
+        latlng = new google.maps.LatLng(location.lat, location.long);
         var marker = new google.maps.Marker({
             map: map,
             animation: google.maps.Animation.DROP,
             position: latlng
         });
 
-        // When marker gets clicked on it toggles bouncing animation and info window pops up
-        // on map with html object information from the createMarker function.
+        // When marker gets clicked on, it toggles bouncing animation and info window pops up
         google.maps.event.addListener(marker, 'click', function() {
-            //infowindow.setContent(html);
-            //infowindow.open(map, this);
+            //console.log(location);
+            html = '<h3>' + location.name + '</h3>' + location.address;
+            html += '<br><img src=' + location.rating_img_small_url + '>';
+            html += '<p>' + location.snippet_text + '</p>';
+            infowindow.setContent(html);
+            infowindow.open(map, this);
             toggleBounce(marker);
         });
         return marker;
@@ -193,9 +194,8 @@ function initMap() {
     // Loop that iterates through each object in the locations array.  Marker property stores coordinates
     // for exact location for each object.  Because createMarker function is called it will display each
     // and every marker in locations on the map.
-    for (i = 0; i < locations.length; i++) {
-        
-        locations[i].marker = createMarker(new google.maps.LatLng(locations[i].lat, locations[i].long));
+    for (var i = 0; i < locations.length; i++) {
+        locations[i].marker = createMarker(locations[i]);
     }
 
     //  Activate knockout bindings
