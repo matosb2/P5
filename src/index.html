@@ -9,15 +9,23 @@
 </head>
 
 <body>
-    <div id="searchmenu">
-        <input id="searchbox" placeholder="Search..." type="search" data-bind="textInput: query"></input>
-        <div id="menu">
-            <ul data-bind="foreach: search()">
-                <li data-bind="text: name, click: $parent.setLocation"></li>
-            </ul>
+    <nav id="drawer">
+        <div id="searchmenu">
+            <input id="searchbox" placeholder="Search..." type="search" data-bind="textInput: query"></input>
+            <div id="menu">
+                <ul data-bind="foreach: search()">
+                    <li data-bind="text: name, click: $parent.setLocation"></li>
+                </ul>
+            </div>
         </div>
-    </div>
-    <div id="map"></div>
+    </nav>
+    <main id="map">
+        <a id="burgMenu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"></path>
+            </svg>
+        </a>
+    </main>
     <script src="library/oauth-signature.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
