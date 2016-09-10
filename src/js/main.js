@@ -145,7 +145,7 @@ function nonce_generate() {
   for(var i = 0; i < locations.length; i++) {
     yelpAPI(i);
   }
-var map;
+var map, bounds;
 // Main map function that zooms in and centers it at specific location due to the given
 // coordinates.  Also displays the map in the respective div.
 function initMap() {
@@ -153,7 +153,7 @@ function initMap() {
         zoom: 12,
         center: new google.maps.LatLng(40.753011, -74.128069)
     });
-
+    bounds = new google.maps.LatLngBounds();
     var infowindow = new google.maps.InfoWindow();
 
 
@@ -166,6 +166,8 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             position: latlng
         });
+        
+        bounds.extend(marker.position);
 
         // When marker gets clicked on, it toggles bouncing animation and info window pops up
         google.maps.event.addListener(marker, 'click', function() {
@@ -177,8 +179,13 @@ function initMap() {
             infowindow.open(map, this);
             toggleBounce(marker);
         });
-        return marker;
+
+
+        return marker;  
+        
+
     }
+
 
     // Set's bounce animation to marker with a timer on it so it doesn't
     // keep bouncing forever
@@ -197,7 +204,8 @@ function initMap() {
     for (var i = 0; i < locations.length; i++) {
         locations[i].marker = createMarker(locations[i]);
     }
-
+    map.fitBounds(bounds);
+    
     //  Activate knockout bindings
     ko.applyBindings(new viewModel());
 
