@@ -27,15 +27,15 @@ nav.open {
     transform: translate(0, 0);
 }
 
-#map {
-    height: 100%;
-    width: 75%;
-}
+#burgMenu {
+    width: 40px;
 
-#drawer {
-	height: 100%;
-	width: 25%;
 }
+/*#map {
+    height: 100%;
+    width: 67%;
+}*/
+
 
 #searchbox {
 	width: 100%;
