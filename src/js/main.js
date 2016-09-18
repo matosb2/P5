@@ -135,6 +135,7 @@ function nonce_generate() {
         },
         error: function() {
             // Do stuff on fail
+            console.log("You have encountered an error");
         }
     };
 
@@ -181,7 +182,7 @@ function initMap() {
         });
 
 
-        return marker;  
+        return marker;
         
 
     }
