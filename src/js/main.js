@@ -132,10 +132,11 @@ function nonce_generate() {
           locations[i].url = results.url;
           locations[i].rating_img_small_url = results.rating_img_url_small;
           locations[i].snippet_text = results.snippet_text;
+          locations[i].image_url = results.image_url;
         },
         error: function() {
             // Do stuff on fail
-            console.log("You have encountered an error");
+            alert("You have encountered an error");
         }
     };
 
@@ -173,9 +174,10 @@ function initMap() {
         // When marker gets clicked on, it toggles bouncing animation and info window pops up
         google.maps.event.addListener(marker, 'click', function() {
             //console.log(location);
-            html = '<h3>' + location.name + '</h3>' + location.address;
+            html = '<h3>' + location.name + '</h3>';
+            html += '<br><img src=' + location.image_url + '><br>' + location.address;
             html += '<br><img src=' + location.rating_img_small_url + '>';
-            html += '<p>' + location.snippet_text + '</p>';
+            html += '<p>' + location.snippet_text + '<a href="' + location.url + '">more...</a></p>';
             infowindow.setContent(html);
             infowindow.open(map, this);
             toggleBounce(marker);
