@@ -1,4 +1,5 @@
-// Set up object array to be used later by map, markers, and list
+/** Set up object array to be used later by map, markers, and list
+ */
 var locations = [{
     name: "Red Bull Arena",
     address: "600 Cape May St, Harrison, NJ 07029",
@@ -44,34 +45,36 @@ var locations = [{
 }];
 
 
-//VIEW
 var Location = function(data) {
     this.name = ko.observable(data.name);
-    /*this.address = ko.observable(data.address);
+    this.address = ko.observable(data.address);
     this.lat = ko.observable(data.lat);
-    this.long = ko.observable(data.long);*/
+    this.long = ko.observable(data.long);
 };
 
-// Considering how 'this' changes in every scope, 'self' will preserve
-// 'this' value throughout viewModel.  Since we want our array of objects to be
-// able to detect changes as well as respond to changes we use knockout's
-// observableArray and pass our array of objects (locations) through it.
-// It will now be referred to self.places.
+/** Considering how 'this' changes in every scope, 'self' will preserve
+ * 'this' value throughout viewModel.  Since we want our array of objects to be
+ * able to detect changes as well as respond to changes we use knockout's
+ * observableArray and pass our array of objects (locations) through it.
+ * It will now be referred to self.places.
+ */
 var viewModel = function() {
     var self = this;
     self.places = ko.observableArray(locations);
 
-    // Set currentLocation to first object in object array.
-    // When particular object is clicked from list, change currentLocation
-    // value to the clicked location.  Also trigger a click on the marker.
+    /** Set currentLocation to first object in object array.
+     * When particular object is clicked from list, change currentLocation
+     * value to the clicked location.  Also trigger a click on the marker.
+     */
     this.currentLocation = ko.observable(self.places()[0]);
     this.setLocation = function(clickedLocation) {
         self.currentLocation(clickedLocation);
         google.maps.event.trigger(clickedLocation.marker, 'click');
     };
 
-    // Setting up search so it filters through object array or locations
-    // while allowing lowercase typing to bring back relevant results.
+    /** Setting up search so it filters through object array or locations
+     * while allowing lowercase typing to bring back relevant results.
+     */
     self.query = ko.observable('');
     self.search = ko.computed(function() {
         return ko.utils.arrayFilter(self.places(), function(place) {
@@ -79,14 +82,16 @@ var viewModel = function() {
         });
     });
 
-    // Display list of locations in a list view
+    /** Display list of locations in a list view
+     */
     self.search = ko.computed(function() {
         for (var i = 0; i < locations.length; i++) {
             locations[i].marker.setVisible(true);
         }
-        // If what's typed in input lowercase or not matches a location in object array
-        // display the results, however many there are.  If there are objects that don't contain
-        // what's typed in the input then hide those objects.
+        /** If what's typed in input lowercase or not matches a location in object array
+         * display the results, however many there are.  If there are objects that don't contain
+         * what's typed in the input then hide those objects.
+         */
         return ko.utils.arrayFilter(locations, function(place) {
             if (place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0) {
                 return true;
@@ -100,9 +105,9 @@ var viewModel = function() {
 };
 
 function nonce_generate() {
-        return (Math.floor(Math.random() * 1e12).toString());
-    }
-    var yelpAPI = function (i) {
+    return (Math.floor(Math.random() * 1e12).toString());
+}
+var yelpAPI = function(i) {
     var yelp_url = locations[i].yelpWeb;
 
     var parameters = {
@@ -113,43 +118,48 @@ function nonce_generate() {
         oauth_signature_method: 'HMAC-SHA1',
         oauth_version: '1.0',
         callback: 'cb', // This is crucial to include for jsonp implementation in AJAX or else the oauth-signature will be wrong.
-    	  ll: '40.753011, -74.128069',
-    	  radius: 40000,
-    	  limit: 5
+        ll: '40.753011, -74.128069',
+        radius: 40000,
+        limit: 5
     };
 
     var encodedSignature = oauthSignature.generate('GET', yelp_url, parameters, 'bVxTwnXgkOCAg5Kfhrw7eWEthu8', 'cK98_xpt5iXoBJVyeysJzw5Ypxk');
     parameters.oauth_signature = encodedSignature;
 
+    /** Configure Yelp API settings as well as provide some error handling
+     */
     var settings = {
         url: yelp_url,
         data: parameters,
         cache: true, // This is crucial to include as well to prevent jQuery from adding on a cache-buster parameter "_=23489489749837", invalidating our oauth-signature
         dataType: 'jsonp',
         success: function(results) {
-            console.log(results);
-          // Do stuff with results
-          locations[i].url = results.url;
-          locations[i].rating_img_small_url = results.rating_img_url_small;
-          locations[i].snippet_text = results.snippet_text;
-          locations[i].image_url = results.image_url;
+            /** Do stuff with results
+             */
+            locations[i].url = results.url;
+            locations[i].rating_img_small_url = results.rating_img_url_small;
+            locations[i].snippet_text = results.snippet_text;
+            locations[i].image_url = results.image_url;
         },
         error: function() {
-            // Do stuff on fail
+            /** Do stuff on fail
+             */
             alert("You have encountered an error");
         }
     };
 
-    // Send AJAX query via jQuery library.
+    /** Send AJAX query via jQuery library.
+     */
     $.ajax(settings);
-  };
-    
-  for(var i = 0; i < locations.length; i++) {
+};
+
+for (var i = 0; i < locations.length; i++) {
     yelpAPI(i);
-  }
+}
 var map, bounds;
-// Main map function that zooms in and centers it at specific location due to the given
-// coordinates.  Also displays the map in the respective div.
+/** Main map function that zooms in and centers it at specific location due to the given
+ * coordinates.  Also displays the map in the respective div.
+ */
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 12,
@@ -160,7 +170,8 @@ function initMap() {
 
 
 
-    // Marker gets created on map with a falling animation and positioned in respective coordinates from locations array up top.
+    /** Marker gets created on map with a falling animation and positioned in respective coordinates from locations array up top.
+     */
     function createMarker(location) {
         latlng = new google.maps.LatLng(location.lat, location.long);
         var marker = new google.maps.Marker({
@@ -168,12 +179,12 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             position: latlng
         });
-        
+
         bounds.extend(marker.position);
 
-        // When marker gets clicked on, it toggles bouncing animation and info window pops up
+        /** When marker gets clicked on, it toggles bouncing animation and info window pops up
+         */
         google.maps.event.addListener(marker, 'click', function() {
-            //console.log(location);
             html = '<h3>' + location.name + '</h3>';
             html += '<br><img src=' + location.image_url + '><br>' + location.address;
             html += '<br><img src=' + location.rating_img_small_url + '>';
@@ -185,13 +196,14 @@ function initMap() {
 
 
         return marker;
-        
+
 
     }
 
 
-    // Set's bounce animation to marker with a timer on it so it doesn't
-    // keep bouncing forever
+    /** Set's bounce animation to marker with a timer on it so it doesn't
+     * keep bouncing forever
+     */
     function toggleBounce(marker) {
         if (marker.getAnimation() !== null) {
             marker.setAnimation(null);
@@ -201,34 +213,35 @@ function initMap() {
         }
     }
 
-    // Loop that iterates through each object in the locations array.  Marker property stores coordinates
-    // for exact location for each object.  Because createMarker function is called it will display each
-    // and every marker in locations on the map.
+    /** Loop that iterates through each object in the locations array.  Marker property stores coordinates
+     * for exact location for each object.  Because createMarker function is called it will display each
+     * and every marker in locations on the map.
+     */
     for (var i = 0; i < locations.length; i++) {
         locations[i].marker = createMarker(locations[i]);
     }
     map.fitBounds(bounds);
-    
-    //  Activate knockout bindings
+
+    /** Activate knockout bindings
+     */
     ko.applyBindings(new viewModel());
 
 
-    
-    
-    
+
+
+
 }
 
-/*
-       * Open the drawer when the menu ison is clicked.
-       */
-      var menu = document.querySelector('#burgMenu');
-      var main = document.querySelector('main');
-      var drawer = document.querySelector('#drawer');
+/** Open the drawer when the menu ison is clicked.
+ */
+var menu = document.querySelector('#burgMenu');
+var main = document.querySelector('main');
+var drawer = document.querySelector('#drawer');
 
-      menu.addEventListener('click', function(e) {
-        drawer.classList.toggle('open');
-        e.stopPropagation();
-      });
-      main.addEventListener('click', function() {
-        drawer.classList.remove('open');
-      });
+menu.addEventListener('click', function(e) {
+    drawer.classList.toggle('open');
+    e.stopPropagation();
+});
+main.addEventListener('click', function() {
+    drawer.classList.remove('open');
+});
