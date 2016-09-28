@@ -86,6 +86,7 @@ var viewModel = function() {
             if (place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0) {
                 return true;
             }
+            infowindow.close();
 
             place.marker.setVisible(false);
             return false;
@@ -146,7 +147,7 @@ var yelpAPI = function(i) {
 for (var i = 0; i < locations.length; i++) {
     yelpAPI(i);
 }
-var map, bounds;
+var map, bounds, infowindow;
 /** Main map function that zooms in and centers it at specific location due to the given
  * coordinates.  Also displays the map in the respective div.
  */
@@ -156,7 +157,7 @@ function initMap() {
         center: new google.maps.LatLng(40.753011, -74.128069)
     });
     bounds = new google.maps.LatLngBounds();
-    var infowindow = new google.maps.InfoWindow();
+    infowindow = new google.maps.InfoWindow();
 
 
 
