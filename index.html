@@ -14,12 +14,10 @@
             <div id="project">
                 <h3>Neighborhood Map Project</h3>
             </div>
-            <input id="searchbox" placeholder="Search..." type="search" data-bind="textInput: query"></input>
+            <input id="searchbox" placeholder="Search..." type="search" data-bind="textInput: query">
             <div id="menu">
                 <ul data-bind="foreach: search()" id="list">
-                    <a>
-                        <li data-bind="text: name, click: $parent.setLocation"></li>
-                    </a>
+                    <li data-bind="text: name, click: $parent.setLocation"></li>
                 </ul>
             </div>
         </div>
@@ -27,7 +25,6 @@
     <a id="burgMenu">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"></path>
-            <h4 id="searchText">Search</h4>
         </svg>
     </a>
     <main id="map"></main>
