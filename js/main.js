@@ -45,12 +45,7 @@ var locations = [{
 }];
 
 
-var Location = function(data) {
-    this.name = ko.observable(data.name);
-    this.address = ko.observable(data.address);
-    this.lat = ko.observable(data.lat);
-    this.long = ko.observable(data.long);
-};
+
 
 /** Considering how 'this' changes in every scope, 'self' will preserve
  * 'this' value throughout viewModel.  Since we want our array of objects to be
