@@ -71,11 +71,6 @@ var viewModel = function() {
      * while allowing lowercase typing to bring back relevant results.
      */
     self.query = ko.observable('');
-    self.search = ko.computed(function() {
-        return ko.utils.arrayFilter(self.places(), function(place) {
-            return place.name.toLowerCase().indexOf(self.query().toLowerCase()) >= 0;
-        });
-    });
 
     /** Display list of locations in a list view
      */
