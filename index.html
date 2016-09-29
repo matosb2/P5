@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css">
     <title>Neighborhood Map Project</title>
 </head>
 
@@ -14,7 +14,8 @@
             <div id="project">
                 <h3>Neighborhood Map Project</h3>
             </div>
-            <input id="searchbox" placeholder="Search..." type="search" data-bind="textInput: query">
+            <input id="searchbox" placeholder="Search..." type
+="search" data-bind="textInput: query">
             <div id="menu">
                 <ul data-bind="foreach: search()" id="list">
                     <li data-bind="text: name, click: $parent.setLocation"></li>
@@ -31,7 +32,7 @@
     <script src="library/oauth-signature.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <script src="js/main.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDsK_DgDME2t1k3F0AFiP52F28hDu9nie4&callback=initMap" async defer></script>
 </body>
 
