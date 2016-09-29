@@ -143,10 +143,9 @@ var yelpAPI = function(i) {
      */
     $.ajax(settings);
 };
-
-for (var i = 0; i < locations.length; i++) {
+/*for (var i = 0; i < locations.length; i++) {
     yelpAPI(i);
-}
+}*/
 var map, bounds, infowindow;
 /** Main map function that zooms in and centers it at specific location due to the given
  * coordinates.  Also displays the map in the respective div.
@@ -176,6 +175,7 @@ function initMap() {
         /** When marker gets clicked on, it toggles bouncing animation and info window pops up
          */
         google.maps.event.addListener(marker, 'click', function() {
+            yelpAPI(i);
             html = '<h3>' + location.name + '</h3>';
             html += '<br><img src=' + location.image_url + '><br>' + location.address;
             html += '<br><img src=' + location.rating_img_small_url + '>';
