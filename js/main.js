@@ -55,6 +55,7 @@ var locations = [{
  */
 var viewModel = function() {
     var self = this;
+
     self.places = ko.observableArray(locations);
 
     /** Set currentLocation to first object in object array.
@@ -93,12 +94,26 @@ var viewModel = function() {
         });
     });
 
+    /** When width of page is > 600px hamburger menu
+     *  is visible, and when clicked list menu slides in.
+     *  Refactored jQuery hamburger menu code into knockout
+     *  to prove ninja-worthiness.
+     */
+    this.isOpen = ko.observable(false)
+
+    this.toggle = function() {
+        self.isOpen(!self.isOpen());
+    }
+    this.close = function() {
+        self.isOpen(false);
+    }
 };
 
 function nonce_generate() {
     return (Math.floor(Math.random() * 1e12).toString());
 }
 var yelpAPI = function(i) {
+    console.log(i);
     var yelp_url = locations[i].yelpWeb;
 
     var parameters = {
@@ -175,16 +190,15 @@ function initMap() {
         /** When marker gets clicked on, it toggles bouncing animation and info window pops up
          */
         google.maps.event.addListener(marker, 'click', function() {
-            yelpAPI(i);
             html = '<h3>' + location.name + '</h3>';
             html += '<br><img src=' + location.image_url + '><br>' + location.address;
             html += '<br><img src=' + location.rating_img_small_url + '>';
             html += '<p>' + location.snippet_text + '<a href="' + location.url + '">more...</a></p>';
+            yelpAPI(location);
             infowindow.setContent(html);
             infowindow.open(map, this);
             toggleBounce(marker);
         });
-
 
         return marker;
 
@@ -216,23 +230,4 @@ function initMap() {
     /** Activate knockout bindings
      */
     ko.applyBindings(new viewModel());
-
-
-
-
-
 }
-
-/** Open the drawer when the menu ison is clicked.
- */
-var menu = document.querySelector('#burgMenu');
-var main = document.querySelector('main');
-var drawer = document.querySelector('#drawer');
-
-menu.addEventListener('click', function(e) {
-    drawer.classList.toggle('open');
-    e.stopPropagation();
-});
-main.addEventListener('click', function() {
-    drawer.classList.remove('open');
-});
