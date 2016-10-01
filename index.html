@@ -9,26 +9,25 @@
 </head>
 
 <body>
-    <nav id="drawer">
-        <div id="searchmenu">
-            <div id="project">
+    <div id="drawer" class="ham-drawer" data-bind="css: {open: isOpen}">
+        <div id="searchmenu" class="search-bar">
+            <div id="project" class="P5">
                 <h3>Neighborhood Map Project</h3>
             </div>
-            <input id="searchbox" placeholder="Search..." type
-="search" data-bind="textInput: query">
-            <div id="menu">
-                <ul data-bind="foreach: search()" id="list">
+            <input id="searchbox" class="searching" placeholder="Search..." type="search" data-bind="textInput: query">
+            <div id="menu" class="list-menu">
+                <ul data-bind="foreach: search()" id="list" class="listing">
                     <li data-bind="text: name, click: $parent.setLocation"></li>
                 </ul>
             </div>
         </div>
-    </nav>
-    <a id="burgMenu">
+    </div>
+    <a id="burgMenu" class="menu-burg" data-bind="click: toggle">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
             <path d="M2 6h20v3H2zm0 5h20v3H2zm0 5h20v3H2z"></path>
         </svg>
     </a>
-    <main id="map"></main>
+    <main id="map" class="lrgMap" data-bind="click: close"></main>
     <script src="library/oauth-signature.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.0/knockout-min.js"></script>
