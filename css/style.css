@@ -31,25 +31,22 @@ main {
     z-index: 1;
 }
 
-
 svg {
-  fill: #f2f2f2;
+    fill: #f2f2f2;
 }
 
 li:hover {
-  background-color: #99ccff;
+    background-color: #99ccff;
 }
-
 
 .listing {
-  list-style-type: none;
-  cursor: pointer;
+    list-style-type: none;
+    cursor: pointer;
 }
 
-
 .P5 {
-  text-align: center;
-  text-decoration: underline;
+    text-align: center;
+    text-decoration: underline;
 }
 
 .searching {
@@ -71,11 +68,14 @@ li:hover {
         flex-grow: 1;
     }
     .menu-burg {
-      width: 0;
+        width: 0;
     }
 }
 
 @media screen and (max-width: 599px) {
+    .ham-drawer {
+        width: 185px;
+    }
     .menu-burg {
         width: 60px;
         color: #f2f2f2;
