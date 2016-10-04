@@ -152,7 +152,7 @@ var yelpAPI = function(location) {
             html += '<br><img src=' + location.rating_img_small_url + '>';
             html += '<p>' + location.snippet_text + '<a href="' + location.url + '">more...</a></p>';
             infowindow.setContent(html);
-            infowindow.open(map);
+            infowindow.open(map, location.marker);
         },
         error: function() {
             /** Do stuff on fail
@@ -166,9 +166,6 @@ var yelpAPI = function(location) {
     $.ajax(settings);
 };
 
-/*for (var i = 0; i < locations.length; i++) {
-    yelpAPI(i);
-}*/
 var map, bounds, infowindow;
 /** Main map function that zooms in and centers it at specific location due to the given
  * coordinates.  Also displays the map in the respective div.
@@ -193,23 +190,16 @@ function initMap() {
             position: latlng
         });
         bounds.extend(marker.position);
+        location.marker = marker;
 
         /** When marker gets clicked on, it toggles bouncing animation and info window pops up
          */
         google.maps.event.addListener(marker, 'click', function() {
             yelpAPI(location);
-            /*html = '<h3>' + location.name + '</h3>';
-            html += '<br><img src=' + location.image_url + '><br>' + location.address;
-            html += '<br><img src=' + location.rating_img_small_url + '>';
-            html += '<p>' + location.snippet_text + '<a href="' + location.url + '">more...</a></p>';
-            infowindow.setContent(html);
-            infowindow.open(map);*/
             toggleBounce(marker);
         });
 
         return marker;
-
-
     }
 
 
