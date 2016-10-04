@@ -99,22 +99,22 @@ var viewModel = function() {
      *  Refactored jQuery hamburger menu code into knockout
      *  to prove ninja-worthiness.
      */
-    this.isOpen = ko.observable(false)
+    this.isOpen = ko.observable(false);
 
     this.toggle = function() {
         self.isOpen(!self.isOpen());
-    }
+    };
     this.close = function() {
         self.isOpen(false);
-    }
+    };
 };
 
 function nonce_generate() {
     return (Math.floor(Math.random() * 1e12).toString());
 }
-var yelpAPI = function(i) {
-    console.log(i);
-    var yelp_url = locations[i].yelpWeb;
+var yelpAPI = function(location) {
+    //console.log(location);
+    var yelp_url = location.yelpWeb;
 
     var parameters = {
         oauth_consumer_key: 'AOsWUWqrkWd3Lx9RHt4ihA',
@@ -142,10 +142,17 @@ var yelpAPI = function(i) {
         success: function(results) {
             /** Do stuff with results
              */
-            locations[i].url = results.url;
-            locations[i].rating_img_small_url = results.rating_img_url_small;
-            locations[i].snippet_text = results.snippet_text;
-            locations[i].image_url = results.image_url;
+            location.url = results.url;
+            location.rating_img_small_url = results.rating_img_url_small;
+            location.snippet_text = results.snippet_text;
+            location.image_url = results.image_url;
+
+            html = '<h3>' + location.name + '</h3>';
+            html += '<br><img src=' + location.image_url + '><br>' + location.address;
+            html += '<br><img src=' + location.rating_img_small_url + '>';
+            html += '<p>' + location.snippet_text + '<a href="' + location.url + '">more...</a></p>';
+            infowindow.setContent(html);
+            infowindow.open(map);
         },
         error: function() {
             /** Do stuff on fail
@@ -158,6 +165,7 @@ var yelpAPI = function(i) {
      */
     $.ajax(settings);
 };
+
 /*for (var i = 0; i < locations.length; i++) {
     yelpAPI(i);
 }*/
@@ -184,19 +192,18 @@ function initMap() {
             animation: google.maps.Animation.DROP,
             position: latlng
         });
-
         bounds.extend(marker.position);
 
         /** When marker gets clicked on, it toggles bouncing animation and info window pops up
          */
         google.maps.event.addListener(marker, 'click', function() {
-            html = '<h3>' + location.name + '</h3>';
+            yelpAPI(location);
+            /*html = '<h3>' + location.name + '</h3>';
             html += '<br><img src=' + location.image_url + '><br>' + location.address;
             html += '<br><img src=' + location.rating_img_small_url + '>';
             html += '<p>' + location.snippet_text + '<a href="' + location.url + '">more...</a></p>';
-            yelpAPI(location);
             infowindow.setContent(html);
-            infowindow.open(map, this);
+            infowindow.open(map);*/
             toggleBounce(marker);
         });
 
