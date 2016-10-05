@@ -167,9 +167,10 @@ var yelpAPI = function(location) {
 };
 
 var map, bounds, infowindow;
+
 function googleError() {
     alert('You have encountered a Google Map Error');
-};
+}
 /** Main map function that zooms in and centers it at specific location due to the given
  * coordinates.  Also displays the map in the respective div.
  */
@@ -231,4 +232,3 @@ function initMap() {
      */
     ko.applyBindings(new viewModel());
 }
-
